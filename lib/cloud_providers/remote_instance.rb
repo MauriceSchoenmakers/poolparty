@@ -37,24 +37,24 @@ module CloudProviders
     end
     
     def chef_bootstrapped?
-      @chef_bootstrapped ||= !ssh(["gem list | grep chef"]).empty?
+      @chef_bootstrapped ||= !ssh(["sudo gem list | sudo grep chef"]).empty?
     end
     
     def bootstrap_chef!
       unless chef_bootstrapped?
         ssh([
-          'apt-get update',
-          'apt-get autoremove -y',
-          'apt-get install -y ruby ruby-dev rubygems git-core',
-          'gem sources -a http://gems.opscode.com',
-          'gem install chef ohai --no-rdoc --no-ri'
+          'sudo apt-get update',
+          'sudo apt-get autoremove -y',
+          'sudo apt-get install -y ruby ruby-dev rubygems git-core libopenssl-ruby',
+          'sudo gem sources -a http://gems.opscode.com',
+          'sudo gem install chef ohai --no-rdoc --no-ri'
         ])
       end
     end
     
     def run_chef!
       ssh([
-        "chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
+        "sudo `sudo gem env | grep EXE | grep gem | cut -f2 -d: | tr -d \" \"`/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
       ])
     end
         

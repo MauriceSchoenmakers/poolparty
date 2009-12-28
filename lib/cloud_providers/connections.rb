@@ -56,7 +56,7 @@ module CloudProviders
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
-      cmd_string =  "rsync -L -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
+      cmd_string =  "rsync -L -e 'ssh #{ssh_options}' --rsync-path 'sudo rsync' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
       out
     end
